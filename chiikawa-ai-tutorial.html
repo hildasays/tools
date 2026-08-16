@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI角色特效教學</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Noto+Sans+HK:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E0E10;
+    --card:#1F2024;
+    --card-line:#2C2D31;
+    --lime:#C6FF3D;
+    --white:#FFFFFF;
+    --muted:#9A9AA2;
+    --coral:#FF5A4D;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Noto Sans HK', sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:0 24px;}
+
+  /* header */
+  header{padding:28px 0 0;}
+  .eyebrow{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:15px;
+    letter-spacing:.04em;
+    color:var(--lime);
+  }
+
+  /* hero */
+  .hero{padding:56px 0 40px; border-bottom:1px solid var(--card-line);}
+  .hero h1{
+    font-size:38px;
+    font-weight:900;
+    letter-spacing:-0.01em;
+    line-height:1.35;
+  }
+  .hero h1 em{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--lime);
+    font-weight:600;
+  }
+  .hero p{
+    margin-top:16px;
+    color:var(--muted);
+    font-size:16px;
+    max-width:52ch;
+  }
+  .hero-tags{display:flex; gap:8px; margin-top:24px; flex-wrap:wrap;}
+  .tag{
+    font-size:12px;
+    color:var(--muted);
+    border:1px solid var(--card-line);
+    border-radius:999px;
+    padding:6px 14px;
+  }
+
+  /* section label */
+  .section-label{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:14px;
+    color:var(--lime);
+    letter-spacing:.03em;
+    margin:56px 0 18px;
+  }
+
+  /* steps */
+  .step{
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:14px;
+    padding:22px 22px 22px 18px;
+    margin-bottom:12px;
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+  }
+  .step-num{
+    font-family:'Cormorant Garamond', serif;
+    font-size:26px;
+    font-weight:600;
+    color:var(--lime);
+    min-width:34px;
+    line-height:1.2;
+  }
+  .step-body h3{font-size:16px; font-weight:700; margin-bottom:6px;}
+  .step-body p{font-size:14px; color:var(--muted);}
+  .step-body code{
+    background:#141416;
+    border:1px solid var(--card-line);
+    border-radius:5px;
+    padding:1px 6px;
+    font-size:13px;
+    color:var(--white);
+  }
+
+  .caution{
+    margin:10px 0 12px;
+    border-left:2px solid var(--coral);
+    padding:10px 14px;
+    background:rgba(255,90,77,0.06);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .caution b{color:var(--coral); font-weight:700;}
+
+  /* prompt cards */
+  .prompt-card{
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:14px;
+    margin-bottom:16px;
+    overflow:hidden;
+  }
+  .prompt-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 18px;
+    border-bottom:1px solid var(--card-line);
+  }
+  .prompt-title{
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .prompt-title span{color:var(--lime);}
+  .copy-btn{
+    background:var(--lime);
+    color:#0E0E10;
+    border:none;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:700;
+    padding:8px 16px;
+    cursor:pointer;
+    font-family:'Noto Sans HK', sans-serif;
+    transition:opacity .15s ease;
+  }
+  .copy-btn:hover{opacity:.85;}
+  .copy-btn:active{opacity:.6;}
+  .copy-btn.copied{background:var(--white);}
+  .prompt-body{
+    padding:18px;
+    font-family:'SFMono-Regular', Consolas, monospace;
+    font-size:13px;
+    line-height:1.75;
+    color:#D8D8DC;
+    white-space:pre-wrap;
+  }
+
+  footer{
+    margin-top:60px;
+    padding:28px 0 40px;
+    border-top:1px solid var(--card-line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  footer .handle{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--lime);
+    font-size:15px;
+  }
+  footer .fine{font-size:12px; color:var(--muted);}
+
+  @media (max-width:520px){
+    .hero h1{font-size:30px;}
+    .step{flex-direction:column; gap:8px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">@hildasays_</div>
+  </header>
+
+  <section class="hero">
+    <h1>你張工作相，<br>可以<em>自己識走位</em>。</h1>
+    <p>呢條IG特效唔使識剪片，兩個AI工具、兩條Prompt就搞掂。跟住落面五步做，10分鐘內出到你自己嗰條片。</p>
+    <div class="hero-tags">
+      <span class="tag">Nano Banana / GPT Image 2</span>
+      <span class="tag">Google Flow · Omni</span>
+      <span class="tag">全程免費試用</span>
+    </div>
+  </section>
+
+  <div class="section-label">五步使用</div>
+
+  <div class="step">
+    <div class="step-num">01</div>
+    <div class="step-body">
+      <h3>準備你的相片</h3>
+      <p>正面清晰、背景簡單即可，唔使特登影過。</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">02</div>
+    <div class="step-body">
+      <h3>生成合成圖</h3>
+      <p>用 <code>Nano Banana</code> 或 <code>GPT Image 2</code>，上傳相片 + Prompt 01 即可。</p>
+      <div class="caution"><b>提示：</b>若出現版權限制（guardrails）生成失敗，屬正常現象 —— 開新對話再試多幾次；GPT較常遇到，Gemini（Nano Banana）一般唔會。</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">03</div>
+    <div class="step-body">
+      <h3>前往 Google Flow</h3>
+      <p><code>labs.google/flow</code>，使用 Omni 模型，免費試用。</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">04</div>
+    <div class="step-body">
+      <h3>生成追逐動畫</h3>
+      <p>上傳合成圖 + Prompt 02，約10秒出片。</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">05</div>
+    <div class="step-body">
+      <h3>下載成品</h3>
+      <p>撞到 MacBook 嗰個驚訝反應，係AI自己演繹出嚟。</p>
+    </div>
+  </div>
+
+  <div class="section-label">兩段 Prompt · 分別複製</div>
+
+  <div class="prompt-card">
+    <div class="prompt-head">
+      <div class="prompt-title">PROMPT 01 · <span>NANO BANANA / GPT IMAGE 2</span></div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p1')">複製</button>
+    </div>
+    <div class="prompt-body" id="p1">A realistic 9:16 smartphone photo of a young Asian woman working on a silver MacBook Pro in a clean minimalist bedroom. A large 3D chiikawa sits on her left shoulder while a small 3D usagi stands on top of her head. Usagi and chiikawa remain in their classic cartoon style, seamlessly integrated into the real environment with realistic lighting and shadows. Soft natural daylight, photorealistic, high detail. The person is focused on working on the MacBook, typing naturally without noticing anything.</div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-head">
+      <div class="prompt-title">PROMPT 02 · <span>GOOGLE FLOW OMNI</span></div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p2')">複製</button>
+    </div>
+    <div class="prompt-body" id="p2">Chiikawa and usagi suddenly move around the person's shoulders, neck, and behind the chair in their original 3D cartoon style. They run back and forth playfully while the person keeps working. Chiikawa accidentally bumps into the MacBook screen, causing the laptop to close. The person pauses, looks at chiikawa and usagi with a slightly surprised but amused expression as they continue chasing each other.</div>
+  </div>
+
+  <footer>
+    <div class="handle">@hildasays_</div>
+    <div class="fine">教學僅供學習參考</div>
+  </footer>
+
+</div>
+
+<script>
+function copyPrompt(btn, id){
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const original = btn.textContent;
+    btn.textContent = '已複製';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+}
+</script>
+
+</body>
+</html>
