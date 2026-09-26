@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude 入門手冊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Noto+Sans+HK:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E0E10;
+    --card:#1F2024;
+    --card-line:#2C2D31;
+    --lime:#C6FF3D;
+    --white:#FFFFFF;
+    --muted:#9A9AA2;
+    --coral:#FF5A4D;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Noto Sans HK', sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:0 24px;}
+
+  /* header */
+  header{padding:28px 0 0;}
+  .eyebrow{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:15px;
+    letter-spacing:.04em;
+    color:var(--lime);
+  }
+
+  /* hero */
+  .hero{padding:56px 0 40px; border-bottom:1px solid var(--card-line);}
+  .hero h1{
+    font-size:38px;
+    font-weight:900;
+    letter-spacing:-0.01em;
+    line-height:1.35;
+  }
+  .hero h1 em{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--lime);
+    font-weight:600;
+  }
+  .hero p{
+    margin-top:16px;
+    color:var(--muted);
+    font-size:16px;
+    max-width:52ch;
+  }
+  .hero-tags{display:flex; gap:8px; margin-top:24px; flex-wrap:wrap;}
+  .tag{
+    font-size:12px;
+    color:var(--muted);
+    border:1px solid var(--card-line);
+    border-radius:999px;
+    padding:6px 14px;
+  }
+
+  /* table of contents */
+  .toc{display:flex; gap:8px; flex-wrap:wrap; margin-top:28px;}
+  .toc a{
+    font-size:13px;
+    color:var(--white);
+    text-decoration:none;
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:8px;
+    padding:6px 12px;
+  }
+  .toc a:hover{border-color:var(--lime);}
+
+  /* section label */
+  .section-label{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:14px;
+    color:var(--lime);
+    letter-spacing:.03em;
+    margin:56px 0 8px;
+  }
+  .section-title{font-size:24px; font-weight:900; line-height:1.4; margin-bottom:8px;}
+  .section-intro{font-size:14px; color:var(--muted); margin-bottom:20px;}
+
+  /* steps */
+  .step{
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:14px;
+    padding:22px 22px 22px 18px;
+    margin-bottom:12px;
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+  }
+  .step-num{
+    font-family:'Cormorant Garamond', serif;
+    font-size:26px;
+    font-weight:600;
+    color:var(--lime);
+    min-width:34px;
+    line-height:1.2;
+  }
+  .step-body{flex:1; min-width:0;}
+  .step-body h3{font-size:16px; font-weight:700; margin-bottom:6px;}
+  .step-body p{font-size:14px; color:var(--muted);}
+  .step-body p + p{margin-top:8px;}
+  .step-body ul{font-size:14px; color:var(--muted); padding-left:18px; margin-top:6px;}
+  .step-body li{margin:2px 0;}
+  .step-body b{color:var(--white); font-weight:700;}
+  code{
+    background:#141416;
+    border:1px solid var(--card-line);
+    border-radius:5px;
+    padding:1px 6px;
+    font-size:13px;
+    color:var(--white);
+  }
+
+  /* four-part formula */
+  .formula{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:14px 0 4px;}
+  .formula div{
+    background:#141416;
+    border:1px solid var(--card-line);
+    border-radius:10px;
+    padding:10px;
+    text-align:center;
+  }
+  .formula b{display:block; color:var(--lime); font-size:15px;}
+  .formula span{font-size:12px; color:var(--muted);}
+
+  .caution{
+    margin:12px 0 12px;
+    border-left:2px solid var(--coral);
+    padding:10px 14px;
+    background:rgba(255,90,77,0.06);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .caution b{color:var(--coral); font-weight:700;}
+
+  .tip{
+    margin:12px 0 12px;
+    border-left:2px solid var(--lime);
+    padding:10px 14px;
+    background:rgba(198,255,61,0.05);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .tip b{color:var(--lime); font-weight:700;}
+
+  /* prompt cards */
+  .prompt-card{
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:14px;
+    margin-bottom:16px;
+    overflow:hidden;
+  }
+  .prompt-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:16px 18px;
+    border-bottom:1px solid var(--card-line);
+  }
+  .prompt-title{
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .prompt-title span{color:var(--lime);}
+  .copy-btn{
+    background:var(--lime);
+    color:#0E0E10;
+    border:none;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:700;
+    padding:8px 16px;
+    cursor:pointer;
+    font-family:'Noto Sans HK', sans-serif;
+    transition:opacity .15s ease;
+    flex-shrink:0;
+  }
+  .copy-btn:hover{opacity:.85;}
+  .copy-btn:active{opacity:.6;}
+  .copy-btn.copied{background:var(--white);}
+  .prompt-body{
+    padding:18px;
+    font-family:'SFMono-Regular', Consolas, monospace;
+    font-size:13px;
+    line-height:1.75;
+    color:#D8D8DC;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+  }
+
+  /* advanced map */
+  .map{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .map-item{
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:12px;
+    padding:16px;
+  }
+  .map-item .lv{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--lime);
+    font-size:14px;
+  }
+  .map-item h4{font-size:15px; font-weight:700; margin:2px 0 4px;}
+  .map-item p{font-size:13px; color:var(--muted);}
+
+  /* mistakes */
+  .mistake{
+    display:flex;
+    gap:12px;
+    padding:14px 0;
+    border-bottom:1px solid var(--card-line);
+    font-size:14px;
+  }
+  .mistake:last-child{border-bottom:none;}
+  .mistake .x{color:var(--coral); font-weight:900; min-width:18px;}
+  .mistake p{color:var(--muted);}
+  .mistake b{color:var(--white);}
+
+  /* checklist */
+  .checklist{
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:14px;
+    padding:8px 18px;
+  }
+  .checklist label{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    padding:12px 0;
+    border-bottom:1px solid var(--card-line);
+    font-size:14px;
+    cursor:pointer;
+  }
+  .checklist label:last-of-type{border-bottom:none;}
+  .checklist input{
+    accent-color:var(--lime);
+    width:18px; height:18px;
+    margin-top:3px;
+    flex-shrink:0;
+  }
+  .checklist .day{color:var(--lime); font-weight:700; min-width:44px;}
+  .checklist input:checked ~ span{color:var(--muted); text-decoration:line-through;}
+  .progress{font-size:13px; color:var(--muted); margin-top:10px;}
+  .progress b{color:var(--lime);}
+
+  footer{
+    margin-top:60px;
+    padding:28px 0 40px;
+    border-top:1px solid var(--card-line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  footer .handle{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--lime);
+    font-size:15px;
+  }
+  footer .fine{font-size:12px; color:var(--muted);}
+
+  @media (max-width:520px){
+    .wrap{padding:0 16px;}
+    .hero h1{font-size:30px;}
+    .step{flex-direction:column; gap:8px;}
+    .formula{grid-template-columns:1fr 1fr;}
+    .map{grid-template-columns:1fr;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">@hildasays_</div>
+  </header>
+
+  <section class="hero">
+    <h1>第一次用 Claude？<br>由<em>第一句說話</em>開始。</h1>
+    <p>唔使識寫程式，唔使一次學晒所有功能。呢本入門手冊帶你由開帳戶、問第一條問題，到整出第一份成品——每一步都有可以直接複製嘅 Prompt。</p>
+    <div class="hero-tags">
+      <span class="tag">claude.ai · 網頁 / App</span>
+      <span class="tag">免費版已經用得</span>
+      <span class="tag">第一週跟住做</span>
+    </div>
+    <nav class="toc">
+      <a href="#start">開始之前</a>
+      <a href="#layer0">第 0 步</a>
+      <a href="#basics">入門五步</a>
+      <a href="#advanced">進階地圖</a>
+      <a href="#mistakes">新手常犯錯</a>
+      <a href="#week1">第一週練習</a>
+    </nav>
+  </section>
+
+  <!-- ───────── 開始之前 ───────── -->
+  <div class="section-label" id="start">Before you start</div>
+  <h2 class="section-title">開始之前</h2>
+  <p class="section-intro">三件事，5 分鐘搞掂。</p>
+
+  <div class="step">
+    <div class="step-num">A</div>
+    <div class="step-body">
+      <h3>開帳戶</h3>
+      <p>去 <code>claude.ai</code> 用 Email 或 Google 帳戶登入，亦可以喺手機下載 Claude App。免費版已經夠你完成成本手冊嘅練習。</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">B</div>
+    <div class="step-body">
+      <h3>認識介面</h3>
+      <ul>
+        <li><b>新對話</b>：每個新題目開一個新對話，Claude 會專心啲</li>
+        <li><b>左邊側欄</b>：以前嘅對話、Projects 都喺度</li>
+        <li><b>＋ 號 / 迴紋針</b>：上傳相片、PDF、Word、Excel 俾 Claude 睇</li>
+        <li><b>設定</b>：可以寫低你嘅個人偏好，等 Claude 每次都記得</li>
+      </ul>
+      <div class="tip"><b>小提示：</b>介面間中會更新，按鈕位置未必一模一樣，搵唔到就直接問 Claude「喺邊度可以設定 XXX？」</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">C</div>
+    <div class="step-body">
+      <h3>記住三條底線</h3>
+      <ul>
+        <li>唔好貼密碼、身份證號碼、信用卡、客戶私隱資料</li>
+        <li>數字、日期、法律 / 醫療資料，<b>一定要自己再核對</b></li>
+        <li>Claude 係你嘅助手，最後判斷同責任喺你度</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ───────── 第 0 步 ───────── -->
+  <div class="section-label" id="layer0">Step 0 · 入口</div>
+  <h2 class="section-title">先跑呢條 Prompt，<br>等 Claude 幫你度身訂造</h2>
+  <p class="section-intro">填入你嘅職業，貼入 Claude。佢會話你知每個功能喺你份工入面可以點用——之後學每一步都會更有感覺。</p>
+
+  <div class="prompt-card">
+    <div class="prompt-head">
+      <div class="prompt-title">PROMPT 00 · <span>度身訂造學習路線</span></div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p0')">複製</button>
+    </div>
+    <div class="prompt-body" id="p0">你係一位有耐性嘅 Claude 入門導師，學生係完全冇用過 AI 工具嘅新手。
+
+我嘅職業 / 工作內容係：[例如：小店老闆、行政文員、補習老師、IG 創作者]
+我最想慳時間嘅工作係：[例如：回覆客人訊息、寫宣傳文案、整理會議紀錄]
+
+請用廣東話，由淺入深介紹以下 Claude 功能：
+1. 基本對話（點樣問問題）
+2. Projects（專案）
+3. 記憶 / 個人偏好設定
+4. Artifacts（直接整成品）
+5. Skills、Connectors 等進階功能（簡單帶過就得）
+
+每個功能請包括：
+- 一句話講清楚佢係咩
+- 2 個同我職業直接相關嘅用法
+- 1 個「今日 10 分鐘內就試到」嘅小任務
+
+唔好用術語，例子要具體、貼近香港日常工作。</div>
+  </div>
+
+  <!-- ───────── 入門五步 ───────── -->
+  <div class="section-label" id="basics">Basics · 1–5</div>
+  <h2 class="section-title">入門五步：<br>由問對問題，到整出成品</h2>
+  <p class="section-intro">跟次序做，每步大約 10–30 分鐘。</p>
+
+  <!-- 01 -->
+  <div class="step">
+    <div class="step-num">01</div>
+    <div class="step-body">
+      <h3>問對問題：四格公式</h3>
+      <p>答案質素 = 問題質素。「幫我寫篇文」同「以 XX 身份，為 XX 讀者寫一篇 XX 字、XX 語氣嘅文」係兩個世界。</p>
+      <div class="formula">
+        <div><b>角色</b><span>你想佢扮邊個</span></div>
+        <div><b>任務</b><span>具體要做咩</span></div>
+        <div><b>背景</b><span>對象、情況</span></div>
+        <div><b>格式</b><span>長度、樣式</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-head">
+      <div class="prompt-title">PROMPT 01 · <span>四格公式範本</span></div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p1')">複製</button>
+    </div>
+    <div class="prompt-body" id="p1">【角色】你係一位 [例如：有 10 年經驗嘅社交媒體編輯]。
+【任務】幫我 [例如：寫 3 個 IG 帖文開場句，宣傳週末手作班]。
+【背景】
+- 對象：[例如：25–40 歲、鍾意手作嘅上班族]
+- 已知資料：[例如：逢星期六下午，$380 一位，材料全包]
+【格式】
+- 每個開場句唔超過 25 字
+- 語氣輕鬆，用廣東話
+- 唔好用問句開頭</div>
+  </div>
+
+  <!-- 02 -->
+  <div class="step">
+    <div class="step-num">02</div>
+    <div class="step-body">
+      <h3>追問，唔好收貨太早</h3>
+      <p>第一個答案通常只係草稿。直接話俾 Claude 知邊度唔啱、要改咩——佢會記得同一個對話入面嘅內容，唔使重新講過。</p>
+      <div class="tip"><b>常用追問：</b>「再短啲」「講得具體啲」「揀第 2 個展開」「用小學生都明嘅方式再講一次」「你仲需要咩資料先答得好啲？」</div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-head">
+      <div class="prompt-title">PROMPT 02 · <span>追問模板</span></div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p2')">複製</button>
+    </div>
+    <div class="prompt-body" id="p2">第 [N] 個版本最接近我想要，但係 [例如：太長 / 太正式 / 唔夠具體]。
+
+請：
+1. 保留佢嘅 [例如：開頭嗰句]
+2. 改成 [例如：一半長度、更口語]
+3. 另外俾多 2 個唔同方向嘅版本俾我揀
+
+改之前，先用一句話講你會點改。</div>
+  </div>
+
+  <!-- 03 -->
+  <div class="step">
+    <div class="step-num">03</div>
+    <div class="step-body">
+      <h3>用 Projects 開一個專屬工作室</h3>
+      <p>每次都要重新解釋背景好煩？開一個 Project，將相關文件同指示放入去，喺呢個 Project 入面開嘅對話，Claude 都會參考返呢啲資料。</p>
+      <ul>
+        <li><b>點開：</b>左邊側欄 → Projects → 新增</li>
+        <li><b>放咩入去：</b>品牌介紹、產品價錢表、你寫得最好嘅 3–5 篇範文</li>
+        <li><b>建議分類：</b>一個工作範疇一個 Project（例如「IG 內容」「客人查詢」「課程準備」）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-head">
+      <div class="prompt-title">PROMPT 03 · <span>貼入 Project 指示（Instructions）</span></div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p3')">複製</button>
+    </div>
+    <div class="prompt-body" id="p3">你係 [品牌 / 公司名] 嘅內容助手。
+
+關於我哋：
+- 做咩：[一句話]
+- 客人係：[一句話]
+- 語氣：[例如：親切、直接、用廣東話，唔好太多 emoji]
+- 避免：[例如：誇張字眼、「史上最」之類嘅說法]
+
+工作方式：
+1. 我叫你寫嘢時，如果資料唔夠，先問我最多 3 條問題
+2. 參考 Project 入面嘅文件，唔好自己作資料
+3. 改我嘅草稿時，先列出改咗邊度、點解，再俾修改版</div>
+  </div>
+
+  <!-- 04 -->
+  <div class="step">
+    <div class="step-num">04</div>
+    <div class="step-body">
+      <h3>等 Claude 記得你係邊個</h3>
+      <p>喺 <b>設定</b> 入面可以填寫個人偏好（例如你嘅職業、想佢用咩語言同語氣），之後每個對話都會套用。部分方案仲有「記憶」功能，會記住你以前傾過嘅重點。</p>
+      <p>唔知點寫？用下面條 Prompt，等 Claude 訪問你，再幫你整理成一段自我介紹。</p>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-head">
+      <div class="prompt-title">PROMPT 04 · <span>整理你嘅「Claude 說明書」</span></div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p4')">複製</button>
+    </div>
+    <div class="prompt-body" id="p4">我想寫一段個人介紹，放入 Claude 嘅個人偏好設定，等你以後每次都了解我。
+
+請你逐條問我問題（一次問一條，等我答完先問下一條），包括：
+- 我嘅職業同日常工作
+- 我最常叫你幫手做嘅 3 件事
+- 我鍾意嘅回覆語言、語氣同長度
+- 我唔鍾意嘅寫法
+
+問完之後，幫我整理成一段 150 字以內嘅個人介紹，用第一人稱，方便我直接複製貼上。</div>
+  </div>
+
+  <!-- 05 -->
+  <div class="step">
+    <div class="step-num">05</div>
+    <div class="step-body">
+      <h3>用 Artifacts 直接整成品</h3>
+      <p>Claude 唔止俾建議，仲可以直接整出可以用嘅嘢：網頁、互動小工具、表格、文件、圖表。成品會喺對話旁邊顯示，可以即時預覽、下載或者分享。</p>
+      <div class="tip"><b>關鍵字：</b>喺 Prompt 講明「整一個可以直接用嘅 ___」，例如「整一個互動網頁」「整一個表格」。</div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-head">
+      <div class="prompt-title">PROMPT 05 · <span>第一個 Artifact</span></div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p5')">複製</button>
+    </div>
+    <div class="prompt-body" id="p5">幫我整一個可以直接用嘅互動網頁：[例如：一週內容計劃表]。
+
+內容：
+- 星期一至日，每日一格
+- 每格可以填：主題、平台（IG / Threads / Facebook）、狀態（構思中 / 製作中 / 已發佈）
+- 預先填好 7 個關於 [你嘅範疇] 嘅主題建議，我之後再改
+
+設計：
+- 簡潔、手機睇都清楚
+- 主色：[例如：米白 + 深灰 + 一個亮色]
+- 介面文字用繁體中文</div>
+  </div>
+
+  <!-- ───────── 進階地圖 ───────── -->
+  <div class="section-label" id="advanced">Advanced · 6–10</div>
+  <h2 class="section-title">打好底之後：進階地圖</h2>
+  <p class="section-intro">熟咗頭五步先玩呢啲。部分功能要付費方案或者電腦版 App，而且會不斷更新，以 Claude 官方說明為準。</p>
+
+  <div class="map">
+    <div class="map-item">
+      <div class="lv">06 · Skills</div>
+      <h4>自訂技能</h4>
+      <p>將你成日重複嘅做法（例如寫帖文嘅格式）教識 Claude 一次，之後一句指令就照做。</p>
+    </div>
+    <div class="map-item">
+      <div class="lv">07 · Connectors</div>
+      <h4>連接外部工具</h4>
+      <p>連上 Google Drive、Gmail、Notion、Calendar 等，Claude 可以讀真實資料、幫你執行動作。</p>
+    </div>
+    <div class="map-item">
+      <div class="lv">08 · Scheduled Tasks</div>
+      <h4>自動排程</h4>
+      <p>設定固定時間自動做嘢，例如每朝整理行程、每週一出一份選題建議。</p>
+    </div>
+    <div class="map-item">
+      <div class="lv">09 · Plugins</div>
+      <h4>工作流打包</h4>
+      <p>將 Skills 同 Connectors 打包成一套，方便自己用，亦可以分享俾團隊或學員。</p>
+    </div>
+    <div class="map-item">
+      <div class="lv">10 · Cowork</div>
+      <h4>幫你操作電腦</h4>
+      <p>喺電腦版 App 直接讀取、整理、建立你電腦上嘅檔案，例如執資料夾、批量改檔名。</p>
+    </div>
+    <div class="map-item">
+      <div class="lv">11 · Dispatch</div>
+      <h4>手機遙距指揮</h4>
+      <p>喺手機發指示，叫電腦上嘅 Claude 幫你做嘢，搭車、等人都推進到工作。</p>
+    </div>
+  </div>
+
+  <div class="caution"><b>留意：</b>用 Connectors、Cowork 呢類可以「做嘢」嘅功能時，叫 Claude 先列出計劃俾你確認先執行；涉及刪除檔案、寄電郵、付款等操作，一定要自己睇清楚先批准。</div>
+
+  <!-- ───────── 常見錯誤 ───────── -->
+  <div class="section-label" id="mistakes">Common mistakes</div>
+  <h2 class="section-title">新手最常犯嘅 5 個錯</h2>
+
+  <div class="step" style="display:block;">
+    <div class="mistake"><span class="x">✕</span><p><b>問得太短</b>——「寫篇文」冇對象、冇長度、冇語氣，出嚟一定好泛。用返四格公式。</p></div>
+    <div class="mistake"><span class="x">✕</span><p><b>一個對話傾晒所有嘢</b>——題目轉咗就開新對話，唔係 Claude 會混淆之前嘅內容。</p></div>
+    <div class="mistake"><span class="x">✕</span><p><b>第一個答案就收貨</b>——追問兩三次，質素通常會明顯好好多。</p></div>
+    <div class="mistake"><span class="x">✕</span><p><b>盡信所有資料</b>——Claude 都會講錯，尤其係數字、日期、最新消息同引用來源。</p></div>
+    <div class="mistake"><span class="x">✕</span><p><b>一開始就衝去玩進階功能</b>——冇打好 Projects 同個人偏好嘅底，進階功能都唔會好用。</p></div>
+  </div>
+
+  <!-- ───────── 第一週練習 ───────── -->
+  <div class="section-label" id="week1">Week 1 practice</div>
+  <h2 class="section-title">第一週練習清單</h2>
+  <p class="section-intro">每日一個小任務，剔完就代表你已經入咗門。進度會儲喺你呢部裝置。</p>
+
+  <div class="checklist" id="checklist">
+    <label><input type="checkbox" data-id="d1"><span class="day">Day 1</span><span>開帳戶，跑一次 Prompt 00，睇下 Claude 點樣介紹佢喺你份工嘅用法</span></label>
+    <label><input type="checkbox" data-id="d2"><span class="day">Day 2</span><span>用四格公式（Prompt 01）處理一件真實工作</span></label>
+    <label><input type="checkbox" data-id="d3"><span class="day">Day 3</span><span>揀昨日嘅答案，用 Prompt 02 追問最少 3 次</span></label>
+    <label><input type="checkbox" data-id="d4"><span class="day">Day 4</span><span>開第一個 Project，貼入 Prompt 03，再上傳 1–3 份參考文件</span></label>
+    <label><input type="checkbox" data-id="d5"><span class="day">Day 5</span><span>用 Prompt 04 整理個人介紹，貼入設定</span></label>
+    <label><input type="checkbox" data-id="d6"><span class="day">Day 6</span><span>用 Prompt 05 整出你第一個 Artifact</span></label>
+    <label><input type="checkbox" data-id="d7"><span class="day">Day 7</span><span>回顧：邊一步最幫到你？揀一樣進階功能，下星期試</span></label>
+  </div>
+  <div class="progress">已完成 <b id="done">0</b> / 7</div>
+
+  <footer>
+    <div class="handle">@hildasays_</div>
+    <div class="fine">教學僅供學習參考 · 參考：傑森所長〈Claude 10 層解鎖〉</div>
+  </footer>
+
+</div>
+
+<script>
+function copyPrompt(btn, id){
+  const text = document.getElementById(id).innerText;
+  const done = () => {
+    const original = btn.textContent;
+    btn.textContent = '已複製';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 1500);
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(done);
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+    done();
+  }
+}
+
+(function(){
+  const KEY = 'claude-beginner-week1';
+  const boxes = document.querySelectorAll('#checklist input');
+  const doneEl = document.getElementById('done');
+  let state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  const update = () => {
+    doneEl.textContent = [...boxes].filter(b => b.checked).length;
+  };
+  boxes.forEach(b => {
+    b.checked = !!state[b.dataset.id];
+    b.addEventListener('change', () => {
+      state[b.dataset.id] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+      update();
+    });
+  });
+  update();
+})();
+</script>
+
+</body>
+</html>
